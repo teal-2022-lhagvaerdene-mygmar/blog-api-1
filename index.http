@@ -1,12 +1,12 @@
-GET http://localhost:50000/categories 
+GET http://localhost:4321/categories 
 
 ###
 
-GET http://localhost:50000/categories/id
+GET http://localhost:4321/categories/id
 
 ###
 
-POST http://localhost:50000/categories 
+POST http://localhost:4321/categories 
 content-type: application/json
 
 {
@@ -15,11 +15,11 @@ content-type: application/json
 
 ###
 
-DELETE http://localhost:50000/categories/e26b3c62-fb01-4b52-ac6d-1883ded850a1
+DELETE http://localhost:4321/categories/e26b3c62-fb01-4b52-ac6d-1883ded850a1
 
 ###
 
-PUT http://localhost:50000/categories/822e5907-54be-4fa7-bc3f-eeb08b4900c1 
+PUT http://localhost:4321/categories/822e5907-54be-4fa7-bc3f-eeb08b4900c1 
 content-type: application/json
 
 {

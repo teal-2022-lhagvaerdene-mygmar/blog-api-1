@@ -27,6 +27,7 @@ app.get("/categories", (req, res) => {
     res.json(filteredList);
   } else {
     res.json(categories);
+    console.log(categories);
   }
 });
 

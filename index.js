@@ -14,6 +14,11 @@ function readCategories() {
   const categories = JSON.parse(content);
   return categories;
 }
+function readArticles() {
+  const content = fs.readFileSync("articles.json");
+  const articles = JSON.parse(content);
+  return articles;
+}
 
 app.get("/categories", (req, res) => {
   const { q } = req.query;
@@ -104,7 +109,36 @@ app.get("/users/update", (req, res) => {
   fs.writeFileSync("data.json", JSON.stringify(users));
   res.json({});
 });
+app.post("/articles", (req, res) => {
+  const { title, categoryId, text } = req.body;
+  const newArticle = { id: uuid(), title, categoryId, text };
 
+  const articles = readArticles();
+
+  articles.unshift(newArticle);
+  fs.writeFileSync("articles.json", JSON.stringify(articles));
+
+  res.sendStatus(201);
+});
+
+app.get("/articles/:id", (req, res) => {
+  const { id } = req.params;
+  const articles = readArticles();
+  const one = articles.find((item) => item.id === id);
+  if (one) {
+    res.json(one);
+  } else {
+    res.sendStatus(404);
+  }
+});
+app.get("/admin", (req, res) => {
+  const newUser = {
+    email: "lhagvae0312@gmail.com",
+    password: "12345678",
+  };
+  fs.writeFileSync("admin.json", JSON.stringify(newUser));
+  res.json(newUser);
+});
 app.listen(port, () => {
   console.log("App is listering at port", port);
 });

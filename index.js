@@ -140,6 +140,11 @@ app.get("/articles/:id", (req, res) => {
     res.sendStatus(404);
   }
 });
+app.get("/articles", (req, res) => {
+  const articles = readArticles();
+
+  res.json(articles);
+});
 app.get("/admin", (req, res) => {
   const newUser = {
     email: "lhagvae0312@gmail.com",

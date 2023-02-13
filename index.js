@@ -112,7 +112,11 @@ app.get("/users/update", (req, res) => {
 });
 
 app.get("/articles", (req, res) => {
-  const { q } = req.query;
+  const { q, page } = req.query;
+
+  // req.query; // ?page=10&q=name
+  // req.params; // blog/:id
+  // req.body; // post request data
   const articles = readArticles();
   if (q) {
     const filteredList = articles.filter((article) =>
@@ -120,8 +124,11 @@ app.get("/articles", (req, res) => {
     );
     res.json(filteredList);
   } else {
-    const page = articles.slice(0, 10);
-    res.json(page);
+    const pagedList = articles.slice((page - 1) * 10, page * 10);
+    res.json({
+      list: pagedList,
+      count: articles.length,
+    });
   }
 });
 
@@ -155,6 +162,17 @@ app.get("/articles/insertSampleData", (req, res) => {
 
     res.json(["success"]);
   });
+});
+app.get("/articles/updateAllCategory", (req, res) => {
+  const articles = readArticles();
+  const categories = readCategories();
+  articles.forEach((article, index) => {
+    const categoryIndex = index % categories.length;
+    article.categoryId = categories[categoryIndex].id;
+  });
+
+  fs.writeFileSync("articles.json", JSON.stringify(articles));
+  res.json(["success"]);
 });
 
 app.get("/articles/:id", (req, res) => {

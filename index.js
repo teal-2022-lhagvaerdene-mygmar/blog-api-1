@@ -3,6 +3,14 @@ const cors = require("cors");
 const fs = require("fs");
 const { v4: uuid } = require("uuid");
 const axios = require("axios");
+const bcrypt = require("bcrypt");
+
+const user = {
+  username: "Horolmaa",
+  password: "$2a$10$4GYsHdAmvSTrkXmADpyR4OJnNj8j3GuL0f8WTL729mtlBEhBKkNzq",
+};
+
+let userTokens = [];
 
 const port = 4321;
 const app = express();
@@ -21,8 +29,30 @@ function readArticles() {
   return articles;
 }
 
+app.get("/login", (req, res) => {
+  const { username, password } = req.query;
+
+  if (
+    user.username === username &&
+    bcrypt.compareSync(password, user.password)
+  ) {
+    const token = uuid();
+    userTokens.push(token);
+    res.json({ token });
+  } else {
+    res.sendStatus(401);
+  }
+});
+
 app.get("/categories", (req, res) => {
-  const { q } = req.query;
+  const { q, token } = req.query;
+
+  console.log({ userTokens, token });
+
+  if (!userTokens.includes(token)) {
+    res.sendStatus(401);
+    return;
+  }
   const categories = readCategories();
   console.log(q);
   if (q) {
@@ -208,15 +238,6 @@ app.get("/articles/:id", (req, res) => {
   } else {
     res.sendStatus(404);
   }
-});
-
-app.get("/admin", (req, res) => {
-  const newUser = {
-    email: "lhagvae0312@gmail.com",
-    password: "12345678",
-  };
-  fs.writeFileSync("admin.json", JSON.stringify(newUser));
-  res.json(newUser);
 });
 
 app.listen(port, () => {

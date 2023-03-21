@@ -1,6 +1,5 @@
 const express = require("express");
 const { v4: uuid } = require("uuid");
-const { connection } = require("../config/mysql");
 const router = express.Router();
 const mongoose = require("mongoose");
 
@@ -33,11 +32,6 @@ router.post("/", async (req, res) => {
     name: name,
   });
   const result = await newCategory.save();
-
-  // await Category.create({
-  //   _id: uuid(),
-  //   name: name,
-  // });
 
   res.sendStatus(201);
 });

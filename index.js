@@ -4,6 +4,7 @@ const cors = require("cors");
 const mongoose = require("mongoose");
 const { categoryRouter } = require("./routes/categoryController");
 const { articleRouter } = require("./routes/articleController");
+const { userRouter } = require("./routes/userController");
 const multer = require("multer");
 const { v4: uuid } = require("uuid");
 const cloudinary = require("cloudinary");
@@ -35,15 +36,6 @@ mongoose
 const port = 4321;
 const app = express();
 
-const userSchema = new mongoose.Schema({
-  name: String,
-  email: String,
-  age: Number,
-  createdAt: Date,
-  // birthDate: String
-});
-
-const User = mongoose.model("User", userSchema, "categories");
 app.use(cors());
 app.use(express.json());
 app.use("/uploads", express.static("uploads"));
@@ -63,6 +55,7 @@ app.post(
     });
   },
 );
+app.use("/users", userRouter);
 app.use("/categories", categoryRouter);
 app.use("/articles", articleRouter);
 app.get("/test-mongoose", (req, res) => {

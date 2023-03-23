@@ -8,6 +8,7 @@ const { userRouter } = require("./routes/userController");
 const multer = require("multer");
 const { v4: uuid } = require("uuid");
 const cloudinary = require("cloudinary");
+const { checkAuth } = require("./middlewares/checkAuth");
 
 cloudinary.config({
   cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
@@ -56,8 +57,8 @@ app.post(
   },
 );
 app.use("/users", userRouter);
-app.use("/categories", categoryRouter);
-app.use("/articles", articleRouter);
+app.use("/categories", categoryRouter, checkAuth);
+app.use("/articles", articleRouter, checkAuth);
 app.get("/test-mongoose", (req, res) => {
   User.create({
     name: "Baldan",

@@ -15,7 +15,9 @@ const articleSchema = new mongoose.Schema({
     height: Number,
   },
 });
+
 const Article = mongoose.model("Article", articleSchema);
+
 router.get("/", async (req, res) => {
   // const { page, size, categoryId } = req.query;
 
@@ -23,9 +25,9 @@ router.get("/", async (req, res) => {
   // let countParams = [];
   // let whereQuery = "";
   // if (categoryId) {
-  //   whereQuery = "where category_id=?";
-  //   params.push(categoryId);
-  //   countParams.push(categoryId);
+  //     whereQuery = "where category_id=?";
+  //     params.push(categoryId);
+  //     countParams.push(categoryId);
   // }
 
   // params.push((page - 1) * size + 1);
@@ -47,12 +49,14 @@ router.get("/:id", async (req, res) => {
 
 router.post("/", async (req, res) => {
   const { title, content, categoryId, image } = req.body;
+
   await Article.create({
     title,
     content,
     categoryId,
     image,
   });
+
   res.sendStatus(201);
 });
 
@@ -65,33 +69,31 @@ router.delete("/:id", async (req, res) => {
 router.put("/:id", async (req, res) => {
   const { id } = req.params;
   const { title, content, categoryId } = req.body;
+
   await Article.updateOne({ _id: id }, { title, content, categoryId });
 
   res.json({ updatedId: id });
 });
 
 // router.get("/populate", (req, res) => {
-//   axios.get("https://dummyjson.com/posts?limit=150").then(function ({ data }) {
-//     const { posts } = data;
-//     posts.forEach((post) => {
-//       const { title, body } = post;
-//       const newArticle = {
-//         id: uuid(),
-//         title,
-//         content: body,
-//       };
-//       connection.query(
-//         `insert into article set ?`,
-//         newArticle,
-//         function (err, results, fields) {
-//           console.log(post.id);
-//         },
-//       );
+//     axios.get("https://dummyjson.com/posts?limit=150").then(function ({ data }) {
+//         const { posts } = data;
+//         posts.forEach((post) => {
+//             const { title, body } = post;
+//             const newArticle = {
+//                 id: uuid(),
+//                 title,
+//                 content: body,
+//             };
+//             connection.query(`insert into article set ?`, newArticle, function (err, results, fields) {
+//                 console.log(post.id);
+//             });
+//         });
 //     });
-//   });
 
-//   res.json(["populate"]);
+//     res.json(["populate"]);
 // });
+
 module.exports = {
   articleRouter: router,
 };
